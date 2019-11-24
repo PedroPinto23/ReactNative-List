@@ -1,5 +1,12 @@
 import React from "react";
-import { Text, View, TextInput, StyleSheet, Button } from "react-native";
+import {
+  Text,
+  View,
+  TextInput,
+  StyleSheet,
+  Button,
+  FlatList
+} from "react-native";
 export default class App extends React.Component {
   state = {
     texto: "",
@@ -10,8 +17,13 @@ export default class App extends React.Component {
     this.setState({ texto: e });
   };
   handleSubmit = () => {
-    this.setState ({ texto: ""})
-    this.setState({ lista: this.state.lista.concat(this.state.texto + " ") });
+    this.state.texto === ""
+      ? alert("Por favor insira um item")
+      : this.setState({
+          texto: "",
+          lista: this.state.lista.concat(this.state.texto)
+        });
+    handleDelete = () => {};
   };
   render() {
     return (
@@ -23,11 +35,16 @@ export default class App extends React.Component {
           onChangeText={this.handleChange}
         />
         <Button title="Enviar" onPress={this.handleSubmit} />
-        <Text>
-          {this.state.lista.map((input, key) => {
+        <FlatList
+          data={this.state.lista.map((input, key) => {
             return <Text key={key + 1}>{input}</Text>;
           })}
-        </Text>
+          renderItem={({ item }) => (
+            <Text style={styles.item}>
+              {item} 
+            </Text>
+          )}
+        />
       </View>
     );
   }
@@ -37,7 +54,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
     justifyContent: "center",
-    padding: 20,
+    padding: 20
+  },
+  item: {
+    padding: 10,
+    fontSize: 18,
+    height: 44
   }
 });
 
